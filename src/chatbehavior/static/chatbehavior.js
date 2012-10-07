@@ -30,10 +30,9 @@
             });
             headers = {
               "content-type": "application/x-json",
-              "routing-key": "*",
               "correlation-id": GUID()
             };
-            client.send("/exchange/" + messages + "/", headers, msg);
+            client.send("/exchange/" + messages + "/*", headers, msg);
             my_messages.push(headers["correlation-id"]);
             return $(this).val("");
           }
