@@ -13,7 +13,7 @@
     <p class="chatMessage" tal:repeat="message viewlet/messages">
       <span class="chatMessageSent"
             tal:define="sent message/sent"
-            tal:content="python:sent.strftime('%Y-%m-%d %H%:%M')">
+            tal:content="python:sent.strftime('%Y-%m-%d %H:%M')">
             2012-10-09 12:00
       </span><span
             class="chatMessageFrom"
