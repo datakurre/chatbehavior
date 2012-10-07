@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en" tal:omit-tag=""
+      i18n:domain="plone">
+<body tal:omit-tag="">
+
+<div class="chat" data-exchange=""
+     tal:attributes="data-messages string:messages-${viewlet/getUUID};
+                     data-confirms string:confirms-${viewlet/getUUID};">
+
+    <p class="chatMessage" tal:repeat="message viewlet/messages">
+      <span class="chatMessageSent"
+            tal:define="sent message/sent"
+            tal:content="python:sent.strftime('%Y-%m-%d %H%:%M')">
+            2012-10-09 12:00
+      </span><span
+            class="chatMessageFrom"
+            tal:content="message/from">
+            Asko
+      </span><span class="chatMessageBody"
+            tal:content="message/body">
+            HelloWorld
+      </span>
+    </p>
+
+</div>
+
+</body>
+</html>

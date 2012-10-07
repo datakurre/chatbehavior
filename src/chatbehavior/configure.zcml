@@ -1,0 +1,32 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:grok="http://namespaces.zope.org/grok"
+           xmlns:plone="http://namespaces.plone.org/plone"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="chatbehavior">
+
+    <includeDependencies package="." />
+    <grok:grok package="." />
+
+    <!-- <i18n:registerTranslations directory="locales" /> -->
+
+    <plone:behavior
+        title="Chat"
+        description="Adds real-time chat viewlet for the content"
+        provides=".interfaces.IChat"
+        factory=".behaviors.Chat"
+        marker=".interfaces.IChattable"
+        i18n:attributes="title description"
+        />
+
+    <genericsetup:registerProfile
+        name="default"
+        title="Chat Behavior"
+        directory="profiles/default"
+        description="Installs AMQP based chat behavior for Dexterity content"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        i18n:attributes="title description"
+        />
+
+</configure>

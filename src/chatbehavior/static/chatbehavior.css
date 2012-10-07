@@ -1,0 +1,46 @@
+.chat input {
+    font-size: 200%;
+}
+
+.chat input[name="nick"] {
+     width: 5em;
+}
+
+.chat input[name="message"] {
+     width: 20em;
+     margin-left: 10px;
+     margin-bottom: 1ex;
+     margin-top: 1em;
+}
+
+#content .chat .chatMessage {
+    margin: 0;
+}
+
+.chat .chatMessageSent {
+    display: inline-block;
+}
+
+.chat .chatMessageFrom {
+    display: inline-block;
+    min-width: 6em;
+    text-align: right;
+    font-weight: bold;
+    margin-right: 1ex;
+}
+
+.chat .chatMessageFrom:after {
+    content: ":";
+}
+
+.chat .chatMessageBody {
+    display: inline-block;
+}
+
+.chat .chatMyMessage {
+    background-color: #ccc;
+}
+
+.chat .chatPendingMessage {
+    opacity: 0.5;
+}
