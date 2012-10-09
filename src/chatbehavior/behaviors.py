@@ -61,8 +61,11 @@ class ChatViewlet(grok.Viewlet):
     grok.require("zope2.View")
 
     def update(self):
+        # Before we can prepare the chat viewlet, we must ensure that
+        # chat-specific AMQP-exchanges have been declared:
         site = getUtility(ISiteRoot)
         ensureExchangesAndBindings(self.getUUID(), site.getId())
+        #
 
         chat = IChat(self.context)
 
@@ -86,13 +89,17 @@ class ChatViewlet(grok.Viewlet):
 
 
 def ensureExchangesAndBindings(uuid, site_id):
-    # Configure channel and bind our consumer to listen to it
+    # Before we can prepare the chat viewlet, we must ensure that
+    # chat-specific AMQP-exchanges have been declared:
     try:
         with BlockingChannel("chat") as channel:
             channel.exchange_declare(
                 exchange="messages-%s" % uuid,
                 auto_delete=True, type="fanout"
             )
+            # Confirms-exchanges cannot be auto deleted, because browsers may
+            # close their connections becore we have confirmed their messages
+            # (and auto-deleting would delete the exchange too early.)
             channel.exchange_declare(
                 exchange="confirms-%s" % uuid,
                 auto_delete=False, type="fanout"
@@ -102,4 +109,7 @@ def ensureExchangesAndBindings(uuid, site_id):
                 exchange="messages-%s" % uuid
             )
     except socket.timeout:
-        ensureExchangesAndBindings(uuid, site_id)  # try again until overflow
+        # Try again until maximum recursion depth is exceeded. Well,
+        # there's 1s socket timeout in Pika's BlockingConnection and
+        # that may happen on slow VServer used in our demo.
+        ensureExchangesAndBindings(uuid, site_id)
