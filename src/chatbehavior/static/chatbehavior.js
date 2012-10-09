@@ -12,7 +12,7 @@
       return "" + (S4()) + (S4()) + "-" + (S4()) + "-" + (S4()) + "-" + (S4()) + "-" + (S4()) + (S4()) + (S4());
     };
     my_messages = [];
-    return $("#viewlet-above-content-body .chat").each(function() {
+    return $("#viewlet-below-content-body .chat").each(function() {
       var chat, client, confirms, connect_guest, message_input, message_template, messages, nick_input, on_connect_guest, on_error_guest;
       chat = $(this);
       messages = chat.data("messages");

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Behaviors """
 
+import socket
 import datetime
 
 from BTrees.IOBTree import IOBTree
@@ -21,7 +22,7 @@ from zope.annotation.interfaces import IAnnotations
 from Products.CMFCore.interfaces import ISiteRoot
 
 from plone.uuid.interfaces import IUUID
-from plone.app.layout.viewlets.interfaces import IAboveContentBody
+from plone.app.layout.viewlets.interfaces import IBelowContentBody
 from plone.dexterity.interfaces import IDexterityContent
 
 from collective.zamqp.connection import BlockingChannel
@@ -55,28 +56,13 @@ class Chat(object):
 class ChatViewlet(grok.Viewlet):
     """ Chat viewlet """
 
-    grok.viewletmanager(IAboveContentBody)
+    grok.viewletmanager(IBelowContentBody)
     grok.context(IChattable)
     grok.require("zope2.View")
 
     def update(self):
         site = getUtility(ISiteRoot)
-        site_id = site.getId()
-
-        # Configure channel and bind our consumer to listen to it
-        with BlockingChannel("chat") as channel:
-            channel.exchange_declare(
-                exchange="messages-%s" % self.getUUID(),
-                auto_delete=True, type="fanout"
-            )
-            channel.exchange_declare(
-                exchange="confirms-%s" % self.getUUID(),
-                auto_delete=True, type="fanout"
-            )
-            channel.queue_bind(
-                queue="chatbehavior.%s" % site_id,
-                exchange="messages-%s" % self.getUUID()
-            )
+        ensureExchangesAndBindings(self.getUUID(), site.getId())
 
         chat = IChat(self.context)
 
@@ -97,3 +83,23 @@ class ChatViewlet(grok.Viewlet):
 
     def getUUID(self):
         return IUUID(self.context)
+
+
+def ensureExchangesAndBindings(uuid, site_id):
+    # Configure channel and bind our consumer to listen to it
+    try:
+        with BlockingChannel("chat") as channel:
+            channel.exchange_declare(
+                exchange="messages-%s" % uuid,
+                auto_delete=True, type="fanout"
+            )
+            channel.exchange_declare(
+                exchange="confirms-%s" % uuid,
+                auto_delete=False, type="fanout"
+            )
+            channel.queue_bind(
+                queue="chatbehavior.%s" % site_id,
+                exchange="messages-%s" % uuid
+            )
+    except socket.timeout:
+        ensureExchangesAndBindings(uuid, site_id)  # try again until overflow

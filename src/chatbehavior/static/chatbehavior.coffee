@@ -16,7 +16,7 @@ jQuery ($) ->
 
   # And then we are ready to find the chat placeholder on the page and
   # make it alive!
-  $("#viewlet-above-content-body .chat").each ->
+  $("#viewlet-below-content-body .chat").each ->
     chat = $(this)
 
     # Exchanges to send and receive messaged and receive confirmation for
