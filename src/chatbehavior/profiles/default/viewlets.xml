@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object>
+  <order manager="plone.belowcontentbody" skinname="*">
+    <viewlet name="chatviewlet" insert-before="*"/>
+  </order>
+
+</object>

@@ -59,6 +59,7 @@ class ChatViewlet(grok.Viewlet):
     grok.viewletmanager(IBelowContentBody)
     grok.context(IChattable)
     grok.require("zope2.View")
+    grok.name("chatviewlet")
 
     def update(self):
         # Before we can prepare the chat viewlet, we must ensure that
