@@ -3,6 +3,7 @@ This is just a demo on how AMQP (and message queues in general) can be used to
 serialize write operations for ZODB.
 
 ::
+
     python bootstrap.py
     bin/buildout
 
