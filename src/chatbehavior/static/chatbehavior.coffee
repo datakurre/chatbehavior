@@ -101,7 +101,7 @@ jQuery ($) ->
     Stomp.WebSocketClass = SockJS
 
     # 2) And create a new stomp client ready to open a connction
-    client = Stomp.client "http://" + window.location.hostname + ":55674/stomp"
+    client = Stomp.client "http://" + window.location.hostname + ":15674/stomp"
 
     # 3) Connect!
     do connect_guest
