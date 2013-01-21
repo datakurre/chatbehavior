@@ -76,8 +76,9 @@ class ChatViewlet(grok.Viewlet):
         end = datetime.datetime.now()
         setattr(self.context, "_v_chat_last_lookup", end)
 
-        lookup = (chat.messages[idx] for idx in chat.index.apply((start, end)))
-        messages = sorted(lookup, cmp=lambda x, y: cmp(y["sent"], x["sent"]))
+        lookup = chat.index.apply((start, end))
+        messages = [chat.messages[idx] for idx in
+                    chat.index.sort(lookup, reverse=True)]
 
         all_messages = getattr(self.context, "_v_chat_messages", [])
         messages.extend(all_messages)
